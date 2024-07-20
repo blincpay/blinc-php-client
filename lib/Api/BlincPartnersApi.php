@@ -71,7 +71,7 @@ class BlincPartnersApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'partnersV1CommitmentPaymentCommitmentIdPost' => [
+        'getPayment' => [
             'application/json',
         ],
     ];
@@ -123,35 +123,34 @@ class BlincPartnersApi
     }
 
     /**
-     * Operation partnersV1CommitmentPaymentCommitmentIdPost
+     * Operation getPayment
      *
-     * @param  string $payment_commitment_id payment_commitment_id (required)
-     * @param  \OpenAPI\Client\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto payment_onboard_session_input_dto (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'] to see the possible values for this operation
+     * @param  int $payment_commitment_id payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return void
+     * @return \OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto
      */
-    public function partnersV1CommitmentPaymentCommitmentIdPost($payment_commitment_id, $payment_onboard_session_input_dto, string $contentType = self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'][0])
+    public function getPayment($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        $this->partnersV1CommitmentPaymentCommitmentIdPostWithHttpInfo($payment_commitment_id, $payment_onboard_session_input_dto, $contentType);
+        list($response) = $this->getPaymentWithHttpInfo($payment_commitment_id, $contentType);
+        return $response;
     }
 
     /**
-     * Operation partnersV1CommitmentPaymentCommitmentIdPostWithHttpInfo
+     * Operation getPaymentWithHttpInfo
      *
-     * @param  string $payment_commitment_id (required)
-     * @param  \OpenAPI\Client\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'] to see the possible values for this operation
+     * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto, HTTP status code, HTTP response headers (array of strings)
      */
-    public function partnersV1CommitmentPaymentCommitmentIdPostWithHttpInfo($payment_commitment_id, $payment_onboard_session_input_dto, string $contentType = self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'][0])
+    public function getPaymentWithHttpInfo($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        $request = $this->partnersV1CommitmentPaymentCommitmentIdPostRequest($payment_commitment_id, $payment_onboard_session_input_dto, $contentType);
+        $request = $this->getPaymentRequest($payment_commitment_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -188,28 +187,91 @@ class BlincPartnersApi
                 );
             }
 
-            return [null, $statusCode, $response->getHeaders()];
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
 
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
             }
             throw $e;
         }
     }
 
     /**
-     * Operation partnersV1CommitmentPaymentCommitmentIdPostAsync
+     * Operation getPaymentAsync
      *
-     * @param  string $payment_commitment_id (required)
-     * @param  \OpenAPI\Client\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'] to see the possible values for this operation
+     * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function partnersV1CommitmentPaymentCommitmentIdPostAsync($payment_commitment_id, $payment_onboard_session_input_dto, string $contentType = self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'][0])
+    public function getPaymentAsync($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        return $this->partnersV1CommitmentPaymentCommitmentIdPostAsyncWithHttpInfo($payment_commitment_id, $payment_onboard_session_input_dto, $contentType)
+        return $this->getPaymentAsyncWithHttpInfo($payment_commitment_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -218,25 +280,37 @@ class BlincPartnersApi
     }
 
     /**
-     * Operation partnersV1CommitmentPaymentCommitmentIdPostAsyncWithHttpInfo
+     * Operation getPaymentAsyncWithHttpInfo
      *
-     * @param  string $payment_commitment_id (required)
-     * @param  \OpenAPI\Client\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'] to see the possible values for this operation
+     * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function partnersV1CommitmentPaymentCommitmentIdPostAsyncWithHttpInfo($payment_commitment_id, $payment_onboard_session_input_dto, string $contentType = self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'][0])
+    public function getPaymentAsyncWithHttpInfo($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        $returnType = '';
-        $request = $this->partnersV1CommitmentPaymentCommitmentIdPostRequest($payment_commitment_id, $payment_onboard_session_input_dto, $contentType);
+        $returnType = '\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto';
+        $request = $this->getPaymentRequest($payment_commitment_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -256,29 +330,21 @@ class BlincPartnersApi
     }
 
     /**
-     * Create request for operation 'partnersV1CommitmentPaymentCommitmentIdPost'
+     * Create request for operation 'getPayment'
      *
-     * @param  string $payment_commitment_id (required)
-     * @param  \OpenAPI\Client\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'] to see the possible values for this operation
+     * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function partnersV1CommitmentPaymentCommitmentIdPostRequest($payment_commitment_id, $payment_onboard_session_input_dto, string $contentType = self::contentTypes['partnersV1CommitmentPaymentCommitmentIdPost'][0])
+    public function getPaymentRequest($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
 
         // verify the required parameter 'payment_commitment_id' is set
         if ($payment_commitment_id === null || (is_array($payment_commitment_id) && count($payment_commitment_id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $payment_commitment_id when calling partnersV1CommitmentPaymentCommitmentIdPost'
-            );
-        }
-
-        // verify the required parameter 'payment_onboard_session_input_dto' is set
-        if ($payment_onboard_session_input_dto === null || (is_array($payment_onboard_session_input_dto) && count($payment_onboard_session_input_dto) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $payment_onboard_session_input_dto when calling partnersV1CommitmentPaymentCommitmentIdPost'
+                'Missing the required parameter $payment_commitment_id when calling getPayment'
             );
         }
 
@@ -303,20 +369,13 @@ class BlincPartnersApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
 
         // for model (json/xml)
-        if (isset($payment_onboard_session_input_dto)) {
-            if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($payment_onboard_session_input_dto));
-            } else {
-                $httpBody = $payment_onboard_session_input_dto;
-            }
-        } elseif (count($formParams) > 0) {
+        if (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -360,7 +419,7 @@ class BlincPartnersApi
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
-            'POST',
+            'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentOnboardSessionInputDtoTest
+ * PaymentCommitmentExpandedOutputDtoTest
  *
  * PHP version 7.4
  *
@@ -31,15 +31,15 @@ namespace OpenAPI\Client\Test\Model;
 use PHPUnit\Framework\TestCase;
 
 /**
- * PaymentOnboardSessionInputDtoTest Class Doc Comment
+ * PaymentCommitmentExpandedOutputDtoTest Class Doc Comment
  *
  * @category    Class
- * @description PaymentOnboardSessionInputDto
+ * @description PaymentCommitmentExpandedOutputDto
  * @package     OpenAPI\Client
  * @author      OpenAPI Generator team
  * @link        https://openapi-generator.tech
  */
-class PaymentOnboardSessionInputDtoTest extends TestCase
+class PaymentCommitmentExpandedOutputDtoTest extends TestCase
 {
 
     /**
@@ -71,27 +71,27 @@ class PaymentOnboardSessionInputDtoTest extends TestCase
     }
 
     /**
-     * Test "PaymentOnboardSessionInputDto"
+     * Test "PaymentCommitmentExpandedOutputDto"
      */
-    public function testPaymentOnboardSessionInputDto()
+    public function testPaymentCommitmentExpandedOutputDto()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "session_id"
+     * Test attribute "id"
      */
-    public function testPropertySessionId()
+    public function testPropertyId()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "merchant_id"
+     * Test attribute "effective_date"
      */
-    public function testPropertyMerchantId()
+    public function testPropertyEffectiveDate()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -107,9 +107,27 @@ class PaymentOnboardSessionInputDtoTest extends TestCase
     }
 
     /**
+     * Test attribute "merchant"
+     */
+    public function testPropertyMerchant()
+    {
+        // TODO: implement
+        self::markTestIncomplete('Not implemented');
+    }
+
+    /**
      * Test attribute "product"
      */
     public function testPropertyProduct()
+    {
+        // TODO: implement
+        self::markTestIncomplete('Not implemented');
+    }
+
+    /**
+     * Test attribute "payments"
+     */
+    public function testPropertyPayments()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

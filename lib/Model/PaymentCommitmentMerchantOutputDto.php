@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentOnboardSessionInputDto
+ * PaymentCommitmentMerchantOutputDto
  *
  * PHP version 7.4
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \OpenAPI\Client\ObjectSerializer;
 
 /**
- * PaymentOnboardSessionInputDto Class Doc Comment
+ * PaymentCommitmentMerchantOutputDto Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Client
@@ -40,7 +40,7 @@ use \OpenAPI\Client\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \JsonSerializable
+class PaymentCommitmentMerchantOutputDto implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PaymentOnboardSessionInputDto';
+    protected static $openAPIModelName = 'PaymentCommitmentMerchantOutputDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,10 +57,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
       * @var string[]
       */
     protected static $openAPITypes = [
-        'session_id' => 'int',
-        'merchant_id' => 'int',
-        'transaction_amount_cents' => 'int',
-        'product' => '\OpenAPI\Client\Model\PaymentCommitmentProductDto'
+        'name' => 'string',
+        'image_url' => 'string'
     ];
 
     /**
@@ -71,10 +69,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'session_id' => 'int32',
-        'merchant_id' => 'int32',
-        'transaction_amount_cents' => 'int32',
-        'product' => null
+        'name' => null,
+        'image_url' => null
     ];
 
     /**
@@ -83,10 +79,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'session_id' => true,
-        'merchant_id' => false,
-        'transaction_amount_cents' => false,
-        'product' => false
+        'name' => false,
+        'image_url' => false
     ];
 
     /**
@@ -175,10 +169,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $attributeMap = [
-        'session_id' => 'sessionId',
-        'merchant_id' => 'merchantId',
-        'transaction_amount_cents' => 'transactionAmountCents',
-        'product' => 'product'
+        'name' => 'name',
+        'image_url' => 'imageUrl'
     ];
 
     /**
@@ -187,10 +179,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $setters = [
-        'session_id' => 'setSessionId',
-        'merchant_id' => 'setMerchantId',
-        'transaction_amount_cents' => 'setTransactionAmountCents',
-        'product' => 'setProduct'
+        'name' => 'setName',
+        'image_url' => 'setImageUrl'
     ];
 
     /**
@@ -199,10 +189,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
      * @var string[]
      */
     protected static $getters = [
-        'session_id' => 'getSessionId',
-        'merchant_id' => 'getMerchantId',
-        'transaction_amount_cents' => 'getTransactionAmountCents',
-        'product' => 'getProduct'
+        'name' => 'getName',
+        'image_url' => 'getImageUrl'
     ];
 
     /**
@@ -262,10 +250,8 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('session_id', $data ?? [], null);
-        $this->setIfExists('merchant_id', $data ?? [], null);
-        $this->setIfExists('transaction_amount_cents', $data ?? [], null);
-        $this->setIfExists('product', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('image_url', $data ?? [], null);
     }
 
     /**
@@ -295,12 +281,20 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['merchant_id'] === null) {
-            $invalidProperties[] = "'merchant_id' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
         }
-        if ($this->container['transaction_amount_cents'] === null) {
-            $invalidProperties[] = "'transaction_amount_cents' can't be null";
+        if ((mb_strlen($this->container['name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
+
+        if ($this->container['image_url'] === null) {
+            $invalidProperties[] = "'image_url' can't be null";
+        }
+        if ((mb_strlen($this->container['image_url']) < 1)) {
+            $invalidProperties[] = "invalid value for 'image_url', the character length must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -317,116 +311,65 @@ class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \Jso
 
 
     /**
-     * Gets session_id
+     * Gets name
      *
-     * @return int|null
+     * @return string
      */
-    public function getSessionId()
+    public function getName()
     {
-        return $this->container['session_id'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets session_id
+     * Sets name
      *
-     * @param int|null $session_id session_id
+     * @param string $name name
      *
      * @return self
      */
-    public function setSessionId($session_id)
+    public function setName($name)
     {
-        if (is_null($session_id)) {
-            array_push($this->openAPINullablesSetToNull, 'session_id');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('session_id', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['session_id'] = $session_id;
+
+        if ((mb_strlen($name) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $name when calling PaymentCommitmentMerchantOutputDto., must be bigger than or equal to 1.');
+        }
+
+        $this->container['name'] = $name;
 
         return $this;
     }
 
     /**
-     * Gets merchant_id
+     * Gets image_url
      *
-     * @return int
+     * @return string
      */
-    public function getMerchantId()
+    public function getImageUrl()
     {
-        return $this->container['merchant_id'];
+        return $this->container['image_url'];
     }
 
     /**
-     * Sets merchant_id
+     * Sets image_url
      *
-     * @param int $merchant_id merchant_id
+     * @param string $image_url image_url
      *
      * @return self
      */
-    public function setMerchantId($merchant_id)
+    public function setImageUrl($image_url)
     {
-        if (is_null($merchant_id)) {
-            throw new \InvalidArgumentException('non-nullable merchant_id cannot be null');
+        if (is_null($image_url)) {
+            throw new \InvalidArgumentException('non-nullable image_url cannot be null');
         }
-        $this->container['merchant_id'] = $merchant_id;
 
-        return $this;
-    }
-
-    /**
-     * Gets transaction_amount_cents
-     *
-     * @return int
-     */
-    public function getTransactionAmountCents()
-    {
-        return $this->container['transaction_amount_cents'];
-    }
-
-    /**
-     * Sets transaction_amount_cents
-     *
-     * @param int $transaction_amount_cents transaction_amount_cents
-     *
-     * @return self
-     */
-    public function setTransactionAmountCents($transaction_amount_cents)
-    {
-        if (is_null($transaction_amount_cents)) {
-            throw new \InvalidArgumentException('non-nullable transaction_amount_cents cannot be null');
+        if ((mb_strlen($image_url) < 1)) {
+            throw new \InvalidArgumentException('invalid length for $image_url when calling PaymentCommitmentMerchantOutputDto., must be bigger than or equal to 1.');
         }
-        $this->container['transaction_amount_cents'] = $transaction_amount_cents;
 
-        return $this;
-    }
-
-    /**
-     * Gets product
-     *
-     * @return \OpenAPI\Client\Model\PaymentCommitmentProductDto|null
-     */
-    public function getProduct()
-    {
-        return $this->container['product'];
-    }
-
-    /**
-     * Sets product
-     *
-     * @param \OpenAPI\Client\Model\PaymentCommitmentProductDto|null $product product
-     *
-     * @return self
-     */
-    public function setProduct($product)
-    {
-        if (is_null($product)) {
-            throw new \InvalidArgumentException('non-nullable product cannot be null');
-        }
-        $this->container['product'] = $product;
+        $this->container['image_url'] = $image_url;
 
         return $this;
     }

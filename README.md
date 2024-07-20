@@ -61,13 +61,13 @@ $apiInstance = new OpenAPI\Client\Api\BlincPartnersApi(
     new GuzzleHttp\Client(),
     $config
 );
-$payment_commitment_id = 'payment_commitment_id_example'; // string
-$payment_onboard_session_input_dto = new \OpenAPI\Client\Model\PaymentOnboardSessionInputDto(); // \OpenAPI\Client\Model\PaymentOnboardSessionInputDto
+$payment_commitment_id = 56; // int
 
 try {
-    $apiInstance->partnersV1CommitmentPaymentCommitmentIdPost($payment_commitment_id, $payment_onboard_session_input_dto);
+    $result = $apiInstance->getPayment($payment_commitment_id);
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling BlincPartnersApi->partnersV1CommitmentPaymentCommitmentIdPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling BlincPartnersApi->getPayment: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -78,12 +78,15 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*BlincPartnersApi* | [**partnersV1CommitmentPaymentCommitmentIdPost**](docs/Api/BlincPartnersApi.md#partnersv1commitmentpaymentcommitmentidpost) | **POST** /partners/v1/commitment/{paymentCommitmentId} | 
+*BlincPartnersApi* | [**getPayment**](docs/Api/BlincPartnersApi.md#getpayment) | **GET** /partners/v1/commitment/{paymentCommitmentId} | 
 
 ## Models
 
+- [PaymentCommitmentExpandedOutputDto](docs/Model/PaymentCommitmentExpandedOutputDto.md)
+- [PaymentCommitmentInstallmentStatus](docs/Model/PaymentCommitmentInstallmentStatus.md)
+- [PaymentCommitmentMerchantOutputDto](docs/Model/PaymentCommitmentMerchantOutputDto.md)
+- [PaymentCommitmentPaymentOutputDto](docs/Model/PaymentCommitmentPaymentOutputDto.md)
 - [PaymentCommitmentProductDto](docs/Model/PaymentCommitmentProductDto.md)
-- [PaymentOnboardSessionInputDto](docs/Model/PaymentOnboardSessionInputDto.md)
 
 ## Authorization
 

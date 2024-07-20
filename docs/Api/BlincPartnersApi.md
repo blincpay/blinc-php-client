@@ -4,13 +4,13 @@ All URIs are relative to http://localhost, except if the operation defines anoth
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**partnersV1CommitmentPaymentCommitmentIdPost()**](BlincPartnersApi.md#partnersV1CommitmentPaymentCommitmentIdPost) | **POST** /partners/v1/commitment/{paymentCommitmentId} |  |
+| [**getPayment()**](BlincPartnersApi.md#getPayment) | **GET** /partners/v1/commitment/{paymentCommitmentId} |  |
 
 
-## `partnersV1CommitmentPaymentCommitmentIdPost()`
+## `getPayment()`
 
 ```php
-partnersV1CommitmentPaymentCommitmentIdPost($payment_commitment_id, $payment_onboard_session_input_dto)
+getPayment($payment_commitment_id): \OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto
 ```
 
 
@@ -34,13 +34,13 @@ $apiInstance = new OpenAPI\Client\Api\BlincPartnersApi(
     new GuzzleHttp\Client(),
     $config
 );
-$payment_commitment_id = 'payment_commitment_id_example'; // string
-$payment_onboard_session_input_dto = new \OpenAPI\Client\Model\PaymentOnboardSessionInputDto(); // \OpenAPI\Client\Model\PaymentOnboardSessionInputDto
+$payment_commitment_id = 56; // int
 
 try {
-    $apiInstance->partnersV1CommitmentPaymentCommitmentIdPost($payment_commitment_id, $payment_onboard_session_input_dto);
+    $result = $apiInstance->getPayment($payment_commitment_id);
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling BlincPartnersApi->partnersV1CommitmentPaymentCommitmentIdPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling BlincPartnersApi->getPayment: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -48,12 +48,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **payment_commitment_id** | **string**|  | |
-| **payment_onboard_session_input_dto** | [**\OpenAPI\Client\Model\PaymentOnboardSessionInputDto**](../Model/PaymentOnboardSessionInputDto.md)|  | |
+| **payment_commitment_id** | **int**|  | |
 
 ### Return type
 
-void (empty response body)
+[**\OpenAPI\Client\Model\PaymentCommitmentExpandedOutputDto**](../Model/PaymentCommitmentExpandedOutputDto.md)
 
 ### Authorization
 
@@ -61,8 +60,8 @@ void (empty response body)
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json`
-- **Accept**: Not defined
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
