@@ -62,6 +62,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => 'int',
         'merchant' => '\BlincPartners\Model\PaymentCommitmentMerchantOutputDto',
         'product' => '\BlincPartners\Model\PaymentCommitmentProductDto',
+        'metadata' => 'mixed',
         'payments' => '\BlincPartners\Model\PaymentCommitmentPaymentOutputDto[]'
     ];
 
@@ -78,6 +79,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => 'int32',
         'merchant' => null,
         'product' => null,
+        'metadata' => null,
         'payments' => null
     ];
 
@@ -92,6 +94,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => false,
         'merchant' => false,
         'product' => false,
+        'metadata' => true,
         'payments' => false
     ];
 
@@ -186,6 +189,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => 'transactionAmountCents',
         'merchant' => 'merchant',
         'product' => 'product',
+        'metadata' => 'metadata',
         'payments' => 'payments'
     ];
 
@@ -200,6 +204,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => 'setTransactionAmountCents',
         'merchant' => 'setMerchant',
         'product' => 'setProduct',
+        'metadata' => 'setMetadata',
         'payments' => 'setPayments'
     ];
 
@@ -214,6 +219,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         'transaction_amount_cents' => 'getTransactionAmountCents',
         'merchant' => 'getMerchant',
         'product' => 'getProduct',
+        'metadata' => 'getMetadata',
         'payments' => 'getPayments'
     ];
 
@@ -279,6 +285,7 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
         $this->setIfExists('transaction_amount_cents', $data ?? [], null);
         $this->setIfExists('merchant', $data ?? [], null);
         $this->setIfExists('product', $data ?? [], null);
+        $this->setIfExists('metadata', $data ?? [], null);
         $this->setIfExists('payments', $data ?? [], null);
     }
 
@@ -473,6 +480,40 @@ class PaymentCommitmentExpandedOutputDto implements ModelInterface, ArrayAccess,
             throw new \InvalidArgumentException('non-nullable product cannot be null');
         }
         $this->container['product'] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Gets metadata
+     *
+     * @return mixed|null
+     */
+    public function getMetadata()
+    {
+        return $this->container['metadata'];
+    }
+
+    /**
+     * Sets metadata
+     *
+     * @param mixed|null $metadata metadata
+     *
+     * @return self
+     */
+    public function setMetadata($metadata)
+    {
+        if (is_null($metadata)) {
+            array_push($this->openAPINullablesSetToNull, 'metadata');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('metadata', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['metadata'] = $metadata;
 
         return $this;
     }

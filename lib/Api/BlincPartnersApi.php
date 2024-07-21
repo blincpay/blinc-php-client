@@ -373,7 +373,7 @@ class BlincPartnersApi
         if (isset($payment_onboard_session_input_dto)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($payment_onboard_session_input_dto));
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($payment_onboard_session_input_dto));
             } else {
                 $httpBody = $payment_onboard_session_input_dto;
             }

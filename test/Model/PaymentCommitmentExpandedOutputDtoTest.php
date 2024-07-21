@@ -125,6 +125,15 @@ class PaymentCommitmentExpandedOutputDtoTest extends TestCase
     }
 
     /**
+     * Test attribute "metadata"
+     */
+    public function testPropertyMetadata()
+    {
+        // TODO: implement
+        $this->markTestIncomplete('Not implemented');
+    }
+
+    /**
      * Test attribute "payments"
      */
     public function testPropertyPayments()
