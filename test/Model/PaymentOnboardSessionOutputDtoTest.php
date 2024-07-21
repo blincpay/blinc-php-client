@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentCommitmentMerchantOutputDtoTest
+ * PaymentOnboardSessionOutputDtoTest
  *
  * PHP version 7.4
  *
@@ -31,15 +31,15 @@ namespace BlincPartners\Test\Model;
 use PHPUnit\Framework\TestCase;
 
 /**
- * PaymentCommitmentMerchantOutputDtoTest Class Doc Comment
+ * PaymentOnboardSessionOutputDtoTest Class Doc Comment
  *
  * @category    Class
- * @description PaymentCommitmentMerchantOutputDto
+ * @description PaymentOnboardSessionOutputDto
  * @package     BlincPartners
  * @author      OpenAPI Generator team
  * @link        https://openapi-generator.tech
  */
-class PaymentCommitmentMerchantOutputDtoTest extends TestCase
+class PaymentOnboardSessionOutputDtoTest extends TestCase
 {
 
     /**
@@ -71,27 +71,18 @@ class PaymentCommitmentMerchantOutputDtoTest extends TestCase
     }
 
     /**
-     * Test "PaymentCommitmentMerchantOutputDto"
+     * Test "PaymentOnboardSessionOutputDto"
      */
-    public function testPaymentCommitmentMerchantOutputDto()
+    public function testPaymentOnboardSessionOutputDto()
     {
         // TODO: implement
         $this->markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "name"
+     * Test attribute "session_id"
      */
-    public function testPropertyName()
-    {
-        // TODO: implement
-        $this->markTestIncomplete('Not implemented');
-    }
-
-    /**
-     * Test attribute "image_url"
-     */
-    public function testPropertyImageUrl()
+    public function testPropertySessionId()
     {
         // TODO: implement
         $this->markTestIncomplete('Not implemented');

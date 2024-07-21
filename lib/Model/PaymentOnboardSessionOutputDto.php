@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentCommitmentPaymentOutputDto
+ * PaymentOnboardSessionOutputDto
  *
  * PHP version 7.4
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \BlincPartners\ObjectSerializer;
 
 /**
- * PaymentCommitmentPaymentOutputDto Class Doc Comment
+ * PaymentOnboardSessionOutputDto Class Doc Comment
  *
  * @category Class
  * @package  BlincPartners
@@ -40,7 +40,7 @@ use \BlincPartners\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, \JsonSerializable
+class PaymentOnboardSessionOutputDto implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PaymentCommitmentPaymentOutputDto';
+    protected static $openAPIModelName = 'PaymentOnboardSessionOutputDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,10 +57,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @var string[]
       */
     protected static $openAPITypes = [
-        'id' => 'int',
-        'scheduled_at' => '\DateTime',
-        'status' => '\BlincPartners\Model\PaymentCommitmentInstallmentStatus',
-        'transaction_amount_cents' => 'int'
+        'session_id' => 'string'
     ];
 
     /**
@@ -71,10 +68,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'id' => 'int32',
-        'scheduled_at' => 'date-time',
-        'status' => null,
-        'transaction_amount_cents' => 'int32'
+        'session_id' => 'uuid'
     ];
 
     /**
@@ -83,10 +77,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'id' => false,
-        'scheduled_at' => false,
-        'status' => false,
-        'transaction_amount_cents' => false
+        'session_id' => false
     ];
 
     /**
@@ -175,10 +166,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $attributeMap = [
-        'id' => 'id',
-        'scheduled_at' => 'scheduledAt',
-        'status' => 'status',
-        'transaction_amount_cents' => 'transactionAmountCents'
+        'session_id' => 'sessionId'
     ];
 
     /**
@@ -187,10 +175,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $setters = [
-        'id' => 'setId',
-        'scheduled_at' => 'setScheduledAt',
-        'status' => 'setStatus',
-        'transaction_amount_cents' => 'setTransactionAmountCents'
+        'session_id' => 'setSessionId'
     ];
 
     /**
@@ -199,10 +184,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $getters = [
-        'id' => 'getId',
-        'scheduled_at' => 'getScheduledAt',
-        'status' => 'getStatus',
-        'transaction_amount_cents' => 'getTransactionAmountCents'
+        'session_id' => 'getSessionId'
     ];
 
     /**
@@ -262,10 +244,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('scheduled_at', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('transaction_amount_cents', $data ?? [], null);
+        $this->setIfExists('session_id', $data ?? [], null);
     }
 
     /**
@@ -295,17 +274,8 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
     {
         $invalidProperties = [];
 
-        if ($this->container['id'] === null) {
-            $invalidProperties[] = "'id' can't be null";
-        }
-        if ($this->container['scheduled_at'] === null) {
-            $invalidProperties[] = "'scheduled_at' can't be null";
-        }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
-        }
-        if ($this->container['transaction_amount_cents'] === null) {
-            $invalidProperties[] = "'transaction_amount_cents' can't be null";
+        if ($this->container['session_id'] === null) {
+            $invalidProperties[] = "'session_id' can't be null";
         }
         return $invalidProperties;
     }
@@ -323,109 +293,28 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
 
 
     /**
-     * Gets id
+     * Gets session_id
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getSessionId()
     {
-        return $this->container['id'];
+        return $this->container['session_id'];
     }
 
     /**
-     * Sets id
+     * Sets session_id
      *
-     * @param int $id id
+     * @param string $session_id session_id
      *
      * @return self
      */
-    public function setId($id)
+    public function setSessionId($session_id)
     {
-        if (is_null($id)) {
-            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($session_id)) {
+            throw new \InvalidArgumentException('non-nullable session_id cannot be null');
         }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets scheduled_at
-     *
-     * @return \DateTime
-     */
-    public function getScheduledAt()
-    {
-        return $this->container['scheduled_at'];
-    }
-
-    /**
-     * Sets scheduled_at
-     *
-     * @param \DateTime $scheduled_at scheduled_at
-     *
-     * @return self
-     */
-    public function setScheduledAt($scheduled_at)
-    {
-        if (is_null($scheduled_at)) {
-            throw new \InvalidArgumentException('non-nullable scheduled_at cannot be null');
-        }
-        $this->container['scheduled_at'] = $scheduled_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return \BlincPartners\Model\PaymentCommitmentInstallmentStatus
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param \BlincPartners\Model\PaymentCommitmentInstallmentStatus $status status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets transaction_amount_cents
-     *
-     * @return int
-     */
-    public function getTransactionAmountCents()
-    {
-        return $this->container['transaction_amount_cents'];
-    }
-
-    /**
-     * Sets transaction_amount_cents
-     *
-     * @param int $transaction_amount_cents transaction_amount_cents
-     *
-     * @return self
-     */
-    public function setTransactionAmountCents($transaction_amount_cents)
-    {
-        if (is_null($transaction_amount_cents)) {
-            throw new \InvalidArgumentException('non-nullable transaction_amount_cents cannot be null');
-        }
-        $this->container['transaction_amount_cents'] = $transaction_amount_cents;
+        $this->container['session_id'] = $session_id;
 
         return $this;
     }

@@ -9,6 +9,8 @@ docs/Model/PaymentCommitmentInstallmentStatus.md
 docs/Model/PaymentCommitmentMerchantOutputDto.md
 docs/Model/PaymentCommitmentPaymentOutputDto.md
 docs/Model/PaymentCommitmentProductDto.md
+docs/Model/PaymentOnboardSessionInputDto.md
+docs/Model/PaymentOnboardSessionOutputDto.md
 git_push.sh
 lib/Api/BlincPartnersApi.php
 lib/ApiException.php
@@ -20,5 +22,7 @@ lib/Model/PaymentCommitmentInstallmentStatus.php
 lib/Model/PaymentCommitmentMerchantOutputDto.php
 lib/Model/PaymentCommitmentPaymentOutputDto.php
 lib/Model/PaymentCommitmentProductDto.php
+lib/Model/PaymentOnboardSessionInputDto.php
+lib/Model/PaymentOnboardSessionOutputDto.php
 lib/ObjectSerializer.php
 phpunit.xml.dist

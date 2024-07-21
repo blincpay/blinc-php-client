@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentCommitmentPaymentOutputDto
+ * PaymentOnboardSessionInputDto
  *
  * PHP version 7.4
  *
@@ -32,7 +32,7 @@ use \ArrayAccess;
 use \BlincPartners\ObjectSerializer;
 
 /**
- * PaymentCommitmentPaymentOutputDto Class Doc Comment
+ * PaymentOnboardSessionInputDto Class Doc Comment
  *
  * @category Class
  * @package  BlincPartners
@@ -40,7 +40,7 @@ use \BlincPartners\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, \JsonSerializable
+class PaymentOnboardSessionInputDto implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -49,7 +49,7 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       *
       * @var string
       */
-    protected static $openAPIModelName = 'PaymentCommitmentPaymentOutputDto';
+    protected static $openAPIModelName = 'PaymentOnboardSessionInputDto';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -57,10 +57,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @var string[]
       */
     protected static $openAPITypes = [
-        'id' => 'int',
-        'scheduled_at' => '\DateTime',
-        'status' => '\BlincPartners\Model\PaymentCommitmentInstallmentStatus',
-        'transaction_amount_cents' => 'int'
+        'transaction_amount_cents' => 'int',
+        'product' => '\BlincPartners\Model\PaymentCommitmentProductDto',
+        'metadata' => 'mixed'
     ];
 
     /**
@@ -71,10 +70,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'id' => 'int32',
-        'scheduled_at' => 'date-time',
-        'status' => null,
-        'transaction_amount_cents' => 'int32'
+        'transaction_amount_cents' => 'int32',
+        'product' => null,
+        'metadata' => null
     ];
 
     /**
@@ -83,10 +81,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'id' => false,
-        'scheduled_at' => false,
-        'status' => false,
-        'transaction_amount_cents' => false
+        'transaction_amount_cents' => false,
+        'product' => false,
+        'metadata' => true
     ];
 
     /**
@@ -175,10 +172,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $attributeMap = [
-        'id' => 'id',
-        'scheduled_at' => 'scheduledAt',
-        'status' => 'status',
-        'transaction_amount_cents' => 'transactionAmountCents'
+        'transaction_amount_cents' => 'transactionAmountCents',
+        'product' => 'product',
+        'metadata' => 'metadata'
     ];
 
     /**
@@ -187,10 +183,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $setters = [
-        'id' => 'setId',
-        'scheduled_at' => 'setScheduledAt',
-        'status' => 'setStatus',
-        'transaction_amount_cents' => 'setTransactionAmountCents'
+        'transaction_amount_cents' => 'setTransactionAmountCents',
+        'product' => 'setProduct',
+        'metadata' => 'setMetadata'
     ];
 
     /**
@@ -199,10 +194,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $getters = [
-        'id' => 'getId',
-        'scheduled_at' => 'getScheduledAt',
-        'status' => 'getStatus',
-        'transaction_amount_cents' => 'getTransactionAmountCents'
+        'transaction_amount_cents' => 'getTransactionAmountCents',
+        'product' => 'getProduct',
+        'metadata' => 'getMetadata'
     ];
 
     /**
@@ -262,10 +256,9 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('scheduled_at', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('transaction_amount_cents', $data ?? [], null);
+        $this->setIfExists('product', $data ?? [], null);
+        $this->setIfExists('metadata', $data ?? [], null);
     }
 
     /**
@@ -295,15 +288,6 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
     {
         $invalidProperties = [];
 
-        if ($this->container['id'] === null) {
-            $invalidProperties[] = "'id' can't be null";
-        }
-        if ($this->container['scheduled_at'] === null) {
-            $invalidProperties[] = "'scheduled_at' can't be null";
-        }
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
-        }
         if ($this->container['transaction_amount_cents'] === null) {
             $invalidProperties[] = "'transaction_amount_cents' can't be null";
         }
@@ -321,87 +305,6 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->container['id'];
-    }
-
-    /**
-     * Sets id
-     *
-     * @param int $id id
-     *
-     * @return self
-     */
-    public function setId($id)
-    {
-        if (is_null($id)) {
-            throw new \InvalidArgumentException('non-nullable id cannot be null');
-        }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets scheduled_at
-     *
-     * @return \DateTime
-     */
-    public function getScheduledAt()
-    {
-        return $this->container['scheduled_at'];
-    }
-
-    /**
-     * Sets scheduled_at
-     *
-     * @param \DateTime $scheduled_at scheduled_at
-     *
-     * @return self
-     */
-    public function setScheduledAt($scheduled_at)
-    {
-        if (is_null($scheduled_at)) {
-            throw new \InvalidArgumentException('non-nullable scheduled_at cannot be null');
-        }
-        $this->container['scheduled_at'] = $scheduled_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return \BlincPartners\Model\PaymentCommitmentInstallmentStatus
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param \BlincPartners\Model\PaymentCommitmentInstallmentStatus $status status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
 
     /**
      * Gets transaction_amount_cents
@@ -426,6 +329,67 @@ class PaymentCommitmentPaymentOutputDto implements ModelInterface, ArrayAccess, 
             throw new \InvalidArgumentException('non-nullable transaction_amount_cents cannot be null');
         }
         $this->container['transaction_amount_cents'] = $transaction_amount_cents;
+
+        return $this;
+    }
+
+    /**
+     * Gets product
+     *
+     * @return \BlincPartners\Model\PaymentCommitmentProductDto|null
+     */
+    public function getProduct()
+    {
+        return $this->container['product'];
+    }
+
+    /**
+     * Sets product
+     *
+     * @param \BlincPartners\Model\PaymentCommitmentProductDto|null $product product
+     *
+     * @return self
+     */
+    public function setProduct($product)
+    {
+        if (is_null($product)) {
+            throw new \InvalidArgumentException('non-nullable product cannot be null');
+        }
+        $this->container['product'] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Gets metadata
+     *
+     * @return mixed|null
+     */
+    public function getMetadata()
+    {
+        return $this->container['metadata'];
+    }
+
+    /**
+     * Sets metadata
+     *
+     * @param mixed|null $metadata metadata
+     *
+     * @return self
+     */
+    public function setMetadata($metadata)
+    {
+        if (is_null($metadata)) {
+            array_push($this->openAPINullablesSetToNull, 'metadata');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('metadata', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['metadata'] = $metadata;
 
         return $this;
     }

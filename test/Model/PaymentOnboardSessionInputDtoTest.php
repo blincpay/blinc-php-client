@@ -1,6 +1,6 @@
 <?php
 /**
- * PaymentCommitmentMerchantOutputDtoTest
+ * PaymentOnboardSessionInputDtoTest
  *
  * PHP version 7.4
  *
@@ -31,15 +31,15 @@ namespace BlincPartners\Test\Model;
 use PHPUnit\Framework\TestCase;
 
 /**
- * PaymentCommitmentMerchantOutputDtoTest Class Doc Comment
+ * PaymentOnboardSessionInputDtoTest Class Doc Comment
  *
  * @category    Class
- * @description PaymentCommitmentMerchantOutputDto
+ * @description PaymentOnboardSessionInputDto
  * @package     BlincPartners
  * @author      OpenAPI Generator team
  * @link        https://openapi-generator.tech
  */
-class PaymentCommitmentMerchantOutputDtoTest extends TestCase
+class PaymentOnboardSessionInputDtoTest extends TestCase
 {
 
     /**
@@ -71,27 +71,36 @@ class PaymentCommitmentMerchantOutputDtoTest extends TestCase
     }
 
     /**
-     * Test "PaymentCommitmentMerchantOutputDto"
+     * Test "PaymentOnboardSessionInputDto"
      */
-    public function testPaymentCommitmentMerchantOutputDto()
+    public function testPaymentOnboardSessionInputDto()
     {
         // TODO: implement
         $this->markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "name"
+     * Test attribute "transaction_amount_cents"
      */
-    public function testPropertyName()
+    public function testPropertyTransactionAmountCents()
     {
         // TODO: implement
         $this->markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "image_url"
+     * Test attribute "product"
      */
-    public function testPropertyImageUrl()
+    public function testPropertyProduct()
+    {
+        // TODO: implement
+        $this->markTestIncomplete('Not implemented');
+    }
+
+    /**
+     * Test attribute "metadata"
+     */
+    public function testPropertyMetadata()
     {
         // TODO: implement
         $this->markTestIncomplete('Not implemented');
