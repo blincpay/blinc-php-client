@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .php-cs-fixer.dist.php
 .travis.yml
 README.md
@@ -15,6 +16,7 @@ git_push.sh
 lib/Api/BlincPartnersApi.php
 lib/ApiException.php
 lib/Configuration.php
+lib/DebugPlugin.php
 lib/HeaderSelector.php
 lib/Model/ModelInterface.php
 lib/Model/PaymentCommitmentExpandedOutputDto.php
@@ -26,3 +28,11 @@ lib/Model/PaymentOnboardSessionInputDto.php
 lib/Model/PaymentOnboardSessionOutputDto.php
 lib/ObjectSerializer.php
 phpunit.xml.dist
+test/Api/BlincPartnersApiTest.php
+test/Model/PaymentCommitmentExpandedOutputDtoTest.php
+test/Model/PaymentCommitmentInstallmentStatusTest.php
+test/Model/PaymentCommitmentMerchantOutputDtoTest.php
+test/Model/PaymentCommitmentPaymentOutputDtoTest.php
+test/Model/PaymentCommitmentProductDtoTest.php
+test/Model/PaymentOnboardSessionInputDtoTest.php
+test/Model/PaymentOnboardSessionOutputDtoTest.php

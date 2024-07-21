@@ -1,11 +1,11 @@
 # BlincPartners\BlincPartnersApi
 
-All URIs are relative to http://localhost, except if the operation defines another base path.
+All URIs are relative to http://localhost.
 
-| Method | HTTP request | Description |
-| ------------- | ------------- | ------------- |
-| [**createSession()**](BlincPartnersApi.md#createSession) | **POST** /partners/v1/session |  |
-| [**getPayment()**](BlincPartnersApi.md#getPayment) | **GET** /partners/v1/commitment/{paymentCommitmentId} |  |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**createSession()**](BlincPartnersApi.md#createSession) | **POST** /partners/v1/session | 
+[**getPayment()**](BlincPartnersApi.md#getPayment) | **GET** /partners/v1/commitment/{paymentCommitmentId} | 
 
 
 ## `createSession()`
@@ -30,8 +30,8 @@ $config = BlincPartners\Configuration::getDefaultConfiguration()->setApiKey('x-a
 
 
 $apiInstance = new BlincPartners\Api\BlincPartnersApi(
-    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
-    // This is optional, `GuzzleHttp\Client` will be used as default.
+    // If you want use custom http client, pass your client which implements `Psr\Http\Client\ClientInterface`.
+    // This is optional, `Psr18ClientDiscovery` will be used to find http client. For instance `GuzzleHttp\Client` implements that interface
     new GuzzleHttp\Client(),
     $config
 );
@@ -47,9 +47,9 @@ try {
 
 ### Parameters
 
-| Name | Type | Description  | Notes |
-| ------------- | ------------- | ------------- | ------------- |
-| **payment_onboard_session_input_dto** | [**\BlincPartners\Model\PaymentOnboardSessionInputDto**](../Model/PaymentOnboardSessionInputDto.md)|  | |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **payment_onboard_session_input_dto** | [**\BlincPartners\Model\PaymentOnboardSessionInputDto**](../Model/PaymentOnboardSessionInputDto.md)|  |
 
 ### Return type
 
@@ -90,8 +90,8 @@ $config = BlincPartners\Configuration::getDefaultConfiguration()->setApiKey('x-a
 
 
 $apiInstance = new BlincPartners\Api\BlincPartnersApi(
-    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
-    // This is optional, `GuzzleHttp\Client` will be used as default.
+    // If you want use custom http client, pass your client which implements `Psr\Http\Client\ClientInterface`.
+    // This is optional, `Psr18ClientDiscovery` will be used to find http client. For instance `GuzzleHttp\Client` implements that interface
     new GuzzleHttp\Client(),
     $config
 );
@@ -107,9 +107,9 @@ try {
 
 ### Parameters
 
-| Name | Type | Description  | Notes |
-| ------------- | ------------- | ------------- | ------------- |
-| **payment_commitment_id** | **int**|  | |
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **payment_commitment_id** | **int**|  |
 
 ### Return type
 
