@@ -1,7 +1,7 @@
 <?php
 /**
  * BlincPartnersApi
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  BlincPartners
@@ -27,32 +27,17 @@
 
 namespace BlincPartners\Api;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
-use GuzzleHttp\Psr7\Query;
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Client\Common\Plugin\RedirectPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\Common\PluginClientFactory;
-use Http\Client\Exception\HttpException;
-use Http\Client\HttpAsyncClient;
-use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use Http\Message\RequestFactory;
-use Http\Promise\Promise;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
 use BlincPartners\ApiException;
 use BlincPartners\Configuration;
-use BlincPartners\DebugPlugin;
 use BlincPartners\HeaderSelector;
 use BlincPartners\ObjectSerializer;
-use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\UriFactoryInterface;
-use Psr\Http\Message\UriInterface;
-use function sprintf;
 
 /**
  * BlincPartnersApi Class Doc Comment
@@ -65,19 +50,9 @@ use function sprintf;
 class BlincPartnersApi
 {
     /**
-     * @var PluginClient
+     * @var ClientInterface
      */
-    protected $httpClient;
-
-    /**
-     * @var PluginClient
-     */
-    protected $httpAsyncClient;
-
-    /**
-     * @var UriFactoryInterface
-     */
-    protected $uriFactory;
+    protected $client;
 
     /**
      * @var Configuration
@@ -94,54 +69,31 @@ class BlincPartnersApi
      */
     protected $hostIndex;
 
-    /**
-     * @var RequestFactoryInterface
-     */
-    protected $requestFactory;
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createSession' => [
+            'application/json',
+        ],
+        'getPayment' => [
+            'application/json',
+        ],
+    ];
 
     /**
-     * @var StreamFactoryInterface
+     * @param ClientInterface $client
+     * @param Configuration   $config
+     * @param HeaderSelector  $selector
+     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
-    protected $streamFactory;
-
     public function __construct(
-        ClientInterface $httpClient = null,
+        ClientInterface $client = null,
         Configuration $config = null,
-        HttpAsyncClient $httpAsyncClient = null,
-        UriFactoryInterface $uriFactory = null,
-        RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null,
         HeaderSelector $selector = null,
-        ?array $plugins = null,
         $hostIndex = 0
     ) {
-        $this->config = $config ?? (new Configuration())->setHost('http://localhost');
-        $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
-        $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
-
-        $plugins = $plugins ?? [
-            new RedirectPlugin(['strict' => true]),
-            new ErrorPlugin(),
-        ];
-
-        if ($this->config->getDebug()) {
-            $plugins[] = new DebugPlugin(fopen($this->config->getDebugFile(), 'ab'));
-        }
-
-        $this->httpClient = (new PluginClientFactory())->createClient(
-            $httpClient ?? Psr18ClientDiscovery::find(),
-            $plugins
-        );
-
-        $this->httpAsyncClient = (new PluginClientFactory())->createClient(
-            $httpAsyncClient ?? HttpAsyncClientDiscovery::find(),
-            $plugins
-        );
-
-        $this->uriFactory = $uriFactory ?? Psr17FactoryDiscovery::findUriFactory();
-
-        $this->headerSelector = $selector ?? new HeaderSelector();
-
+        $this->client = $client ?: new Client();
+        $this->config = $config ?: new Configuration();
+        $this->headerSelector = $selector ?: new HeaderSelector();
         $this->hostIndex = $hostIndex;
     }
 
@@ -177,14 +129,15 @@ class BlincPartnersApi
      * Operation createSession
      *
      * @param  \BlincPartners\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto payment_onboard_session_input_dto (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSession'] to see the possible values for this operation
      *
-     * @throws \BlincPartners\ApiException on non-2xx response
+     * @throws \BlincPartners\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \BlincPartners\Model\PaymentOnboardSessionOutputDto
      */
-    public function createSession($payment_onboard_session_input_dto)
+    public function createSession($payment_onboard_session_input_dto, string $contentType = self::contentTypes['createSession'][0])
     {
-        list($response) = $this->createSessionWithHttpInfo($payment_onboard_session_input_dto);
+        list($response) = $this->createSessionWithHttpInfo($payment_onboard_session_input_dto, $contentType);
         return $response;
     }
 
@@ -192,40 +145,50 @@ class BlincPartnersApi
      * Operation createSessionWithHttpInfo
      *
      * @param  \BlincPartners\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSession'] to see the possible values for this operation
      *
-     * @throws \BlincPartners\ApiException on non-2xx response
+     * @throws \BlincPartners\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \BlincPartners\Model\PaymentOnboardSessionOutputDto, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createSessionWithHttpInfo($payment_onboard_session_input_dto)
+    public function createSessionWithHttpInfo($payment_onboard_session_input_dto, string $contentType = self::contentTypes['createSession'][0])
     {
-        $request = $this->createSessionRequest($payment_onboard_session_input_dto);
+        $request = $this->createSessionRequest($payment_onboard_session_input_dto, $contentType);
 
         try {
+            $options = $this->createHttpClientOption();
             try {
-                $response = $this->httpClient->sendRequest($request);
-            } catch (HttpException $e) {
-                $response = $e->getResponse();
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $response->getStatusCode(),
-                        (string) $request->getUri()
-                    ),
-                    $request,
-                    $response,
-                    $e
-                );
-            } catch (ClientExceptionInterface $e) {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $request,
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
                     null,
-                    $e
+                    null
                 );
             }
 
             $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
 
             switch($statusCode) {
                 case 200:
@@ -233,6 +196,21 @@ class BlincPartnersApi
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
+                        if ('\BlincPartners\Model\PaymentOnboardSessionOutputDto' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
                     }
 
                     return [
@@ -247,6 +225,21 @@ class BlincPartnersApi
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
             }
 
             return [
@@ -274,13 +267,14 @@ class BlincPartnersApi
      * Operation createSessionAsync
      *
      * @param  \BlincPartners\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSession'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return Promise
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSessionAsync($payment_onboard_session_input_dto)
+    public function createSessionAsync($payment_onboard_session_input_dto, string $contentType = self::contentTypes['createSession'][0])
     {
-        return $this->createSessionAsyncWithHttpInfo($payment_onboard_session_input_dto)
+        return $this->createSessionAsyncWithHttpInfo($payment_onboard_session_input_dto, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -292,22 +286,27 @@ class BlincPartnersApi
      * Operation createSessionAsyncWithHttpInfo
      *
      * @param  \BlincPartners\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSession'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return Promise
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSessionAsyncWithHttpInfo($payment_onboard_session_input_dto)
+    public function createSessionAsyncWithHttpInfo($payment_onboard_session_input_dto, string $contentType = self::contentTypes['createSession'][0])
     {
         $returnType = '\BlincPartners\Model\PaymentOnboardSessionOutputDto';
-        $request = $this->createSessionRequest($payment_onboard_session_input_dto);
+        $request = $this->createSessionRequest($payment_onboard_session_input_dto, $contentType);
 
-        return $this->httpAsyncClient->sendAsyncRequest($request)
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -316,7 +315,7 @@ class BlincPartnersApi
                         $response->getHeaders()
                     ];
                 },
-                function (HttpException $exception) {
+                function ($exception) {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -325,9 +324,9 @@ class BlincPartnersApi
                             $statusCode,
                             $exception->getRequest()->getUri()
                         ),
-                        $exception->getRequest(),
-                        $exception->getResponse(),
-                        $exception
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -337,12 +336,14 @@ class BlincPartnersApi
      * Create request for operation 'createSession'
      *
      * @param  \BlincPartners\Model\PaymentOnboardSessionInputDto $payment_onboard_session_input_dto (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSession'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return RequestInterface
+     * @return \GuzzleHttp\Psr7\Request
      */
-    public function createSessionRequest($payment_onboard_session_input_dto)
+    public function createSessionRequest($payment_onboard_session_input_dto, string $contentType = self::contentTypes['createSession'][0])
     {
+
         // verify the required parameter 'payment_onboard_session_input_dto' is set
         if ($payment_onboard_session_input_dto === null || (is_array($payment_onboard_session_input_dto) && count($payment_onboard_session_input_dto) === 0)) {
             throw new \InvalidArgumentException(
@@ -350,32 +351,29 @@ class BlincPartnersApi
             );
         }
 
+
         $resourcePath = '/partners/v1/session';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
-        $httpBody = null;
+        $httpBody = '';
         $multipart = false;
 
 
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($payment_onboard_session_input_dto)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($payment_onboard_session_input_dto));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($payment_onboard_session_input_dto));
             } else {
                 $httpBody = $payment_onboard_session_input_dto;
             }
@@ -394,12 +392,12 @@ class BlincPartnersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
-                $httpBody = Query::build($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
@@ -421,24 +419,28 @@ class BlincPartnersApi
         );
 
         $operationHost = $this->config->getHost();
-
-        $uri = $this->createUri($operationHost, $resourcePath, $queryParams);
-
-        return $this->createRequest('POST', $uri, $headers, $httpBody);
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
     }
 
     /**
      * Operation getPayment
      *
      * @param  int $payment_commitment_id payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
-     * @throws \BlincPartners\ApiException on non-2xx response
+     * @throws \BlincPartners\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \BlincPartners\Model\PaymentCommitmentExpandedOutputDto
      */
-    public function getPayment($payment_commitment_id)
+    public function getPayment($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        list($response) = $this->getPaymentWithHttpInfo($payment_commitment_id);
+        list($response) = $this->getPaymentWithHttpInfo($payment_commitment_id, $contentType);
         return $response;
     }
 
@@ -446,40 +448,50 @@ class BlincPartnersApi
      * Operation getPaymentWithHttpInfo
      *
      * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
-     * @throws \BlincPartners\ApiException on non-2xx response
+     * @throws \BlincPartners\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \BlincPartners\Model\PaymentCommitmentExpandedOutputDto, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getPaymentWithHttpInfo($payment_commitment_id)
+    public function getPaymentWithHttpInfo($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        $request = $this->getPaymentRequest($payment_commitment_id);
+        $request = $this->getPaymentRequest($payment_commitment_id, $contentType);
 
         try {
+            $options = $this->createHttpClientOption();
             try {
-                $response = $this->httpClient->sendRequest($request);
-            } catch (HttpException $e) {
-                $response = $e->getResponse();
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $response->getStatusCode(),
-                        (string) $request->getUri()
-                    ),
-                    $request,
-                    $response,
-                    $e
-                );
-            } catch (ClientExceptionInterface $e) {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $request,
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
                     null,
-                    $e
+                    null
                 );
             }
 
             $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
 
             switch($statusCode) {
                 case 200:
@@ -487,6 +499,21 @@ class BlincPartnersApi
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
+                        if ('\BlincPartners\Model\PaymentCommitmentExpandedOutputDto' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
                     }
 
                     return [
@@ -501,6 +528,21 @@ class BlincPartnersApi
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
             }
 
             return [
@@ -528,13 +570,14 @@ class BlincPartnersApi
      * Operation getPaymentAsync
      *
      * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return Promise
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPaymentAsync($payment_commitment_id)
+    public function getPaymentAsync($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
-        return $this->getPaymentAsyncWithHttpInfo($payment_commitment_id)
+        return $this->getPaymentAsyncWithHttpInfo($payment_commitment_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -546,22 +589,27 @@ class BlincPartnersApi
      * Operation getPaymentAsyncWithHttpInfo
      *
      * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return Promise
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPaymentAsyncWithHttpInfo($payment_commitment_id)
+    public function getPaymentAsyncWithHttpInfo($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
         $returnType = '\BlincPartners\Model\PaymentCommitmentExpandedOutputDto';
-        $request = $this->getPaymentRequest($payment_commitment_id);
+        $request = $this->getPaymentRequest($payment_commitment_id, $contentType);
 
-        return $this->httpAsyncClient->sendAsyncRequest($request)
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
                     if ($returnType === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -570,7 +618,7 @@ class BlincPartnersApi
                         $response->getHeaders()
                     ];
                 },
-                function (HttpException $exception) {
+                function ($exception) {
                     $response = $exception->getResponse();
                     $statusCode = $response->getStatusCode();
                     throw new ApiException(
@@ -579,9 +627,9 @@ class BlincPartnersApi
                             $statusCode,
                             $exception->getRequest()->getUri()
                         ),
-                        $exception->getRequest(),
-                        $exception->getResponse(),
-                        $exception
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -591,12 +639,14 @@ class BlincPartnersApi
      * Create request for operation 'getPayment'
      *
      * @param  int $payment_commitment_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayment'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
-     * @return RequestInterface
+     * @return \GuzzleHttp\Psr7\Request
      */
-    public function getPaymentRequest($payment_commitment_id)
+    public function getPaymentRequest($payment_commitment_id, string $contentType = self::contentTypes['getPayment'][0])
     {
+
         // verify the required parameter 'payment_commitment_id' is set
         if ($payment_commitment_id === null || (is_array($payment_commitment_id) && count($payment_commitment_id) === 0)) {
             throw new \InvalidArgumentException(
@@ -604,11 +654,12 @@ class BlincPartnersApi
             );
         }
 
+
         $resourcePath = '/partners/v1/commitment/{paymentCommitmentId}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
-        $httpBody = null;
+        $httpBody = '';
         $multipart = false;
 
 
@@ -623,16 +674,11 @@ class BlincPartnersApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -650,12 +696,12 @@ class BlincPartnersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
-                $httpBody = Query::build($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
@@ -677,75 +723,31 @@ class BlincPartnersApi
         );
 
         $operationHost = $this->config->getHost();
-
-        $uri = $this->createUri($operationHost, $resourcePath, $queryParams);
-
-        return $this->createRequest('GET', $uri, $headers, $httpBody);
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
     }
-
 
     /**
-     * @param string $method
-     * @param string|UriInterface $uri
-     * @param array $headers
-     * @param string|StreamInterface|null $body
+     * Create http client option
      *
-     * @return RequestInterface
+     * @throws \RuntimeException on file opening failure
+     * @return array of http client options
      */
-    protected function createRequest(string $method, $uri, array $headers = [], $body = null): RequestInterface
+    protected function createHttpClientOption()
     {
-        if ($this->requestFactory instanceof RequestFactory) {
-            return $this->requestFactory->createRequest(
-                $method,
-                $uri,
-                $headers,
-                $body
-            );
+        $options = [];
+        if ($this->config->getDebug()) {
+            $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
+            if (!$options[RequestOptions::DEBUG]) {
+                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+            }
         }
 
-        if (is_string($body) && '' !== $body && null === $this->streamFactory) {
-            throw new \RuntimeException('Cannot create request: A stream factory is required to create a request with a non-empty string body.');
-        }
-
-        $request = $this->requestFactory->createRequest($method, $uri);
-
-        foreach ($headers as $key => $value) {
-            $request = $request->withHeader($key, $value);
-        }
-
-        if (null !== $body && '' !== $body) {
-            $request = $request->withBody(
-                is_string($body) ? $this->streamFactory->createStream($body) : $body
-            );
-        }
-
-        return $request;
-    }
-
-    private function createUri(
-        string $operationHost,
-        string $resourcePath,
-        array $queryParams
-    ): UriInterface {
-        $parsedUrl = parse_url($operationHost);
-
-        $host = $parsedUrl['host'] ?? null;
-        $scheme = $parsedUrl['scheme'] ?? null;
-        $basePath = $parsedUrl['path'] ?? null;
-        $port = $parsedUrl['port'] ?? null;
-        $user = $parsedUrl['user'] ?? null;
-        $password = $parsedUrl['pass'] ?? null;
-
-        $uri = $this->uriFactory->createUri($basePath . $resourcePath)
-            ->withHost($host)
-            ->withScheme($scheme)
-            ->withPort($port)
-            ->withQuery(Query::build($queryParams));
-
-        if ($user) {
-            $uri = $uri->withUserInfo($user, $password);
-        }
-
-        return $uri;
+        return $options;
     }
 }

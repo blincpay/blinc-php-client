@@ -16,7 +16,6 @@ git_push.sh
 lib/Api/BlincPartnersApi.php
 lib/ApiException.php
 lib/Configuration.php
-lib/DebugPlugin.php
 lib/HeaderSelector.php
 lib/Model/ModelInterface.php
 lib/Model/PaymentCommitmentExpandedOutputDto.php
